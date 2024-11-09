@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const News = require('../models/News'); // Importer le modèle News correctement
+const News = require('../Models/news'); // Importer le modèle News correctement
 const SECRET_KEY = '1223444RF4';
 
 const addNews = async (req, res) => {
@@ -53,30 +53,36 @@ const addComment = async (req, res) => {
     }
 };
 
-// Fonction pour aimer ou détester une news
-const likeDislikeNews = async (req, res) => {
+
+
+const traiteReponseNews = async (req, res) => {
     try {
-        const { newsId, action } = req.body; // "action" peut être "like" ou "dislike"
-        const news = await News.findById(newsId);
-        
-        if (!news) {
-            return res.status(404).json({ error: 'News non trouvée' });
-        }
-
-        if (action === 'like') {
-            news.likes += 1;
-        } else if (action === 'dislike') {
-            news.dislikes += 1;
-        } else {
-            return res.status(400).json({ error: "Action invalide. Utilisez 'like' ou 'dislike'." });
-        }
-
-        await news.save();
-        res.status(200).json({ message: 'Action appliquée avec succès', likes: news.likes, dislikes: news.dislikes });
+      // Récupérer toutes les news depuis la base de données
+      const newsList = await News.find();  // Retrieve all news from the database
+  
+      // Vérification si des news existent
+      if (newsList.length === 0) {
+        return res.status(404).json({ message: 'Aucune news trouvée.' });
+      }
+  
+      // Traitement de la liste pour l'affichage (par exemple, formater les titres)
+      const formattedNews = newsList.map(news => ({
+        titre: news.titre,
+        url: news.url,
+        dateAjout: news.dateAjout,
+        auteur: news.auteur,
+        likes:news.likes,
+        dislikes:news.Dislikes,
+        commentaires:news.commentaires
+      }));
+  
+      // Retourner les news formatées
+      res.status(200).json({ formattedNews });
     } catch (error) {
-        res.status(500).json({ error: 'Erreur lors de l’action like/dislike' });
+      res.status(500).json({ message: 'Erreur lors du traitement des news.', error });
     }
-};
-
-
-module.exports = { addNews,addComment ,likeDislikeNews };
+  };
+  
+  module.exports = { traiteReponseNews };
+  
+module.exports = { addNews,addComment  , traiteReponseNews };

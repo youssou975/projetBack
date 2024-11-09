@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 const userroute = require('./Routes/UserRoutes');
 const newroute = require('./Routes/NewRoutes')
-
-
+const scoreroute= require('./Routes/ScoreRoutes')
+const addfriend=require('./Routes/AddFriend')
 // Initialisation de l'application Express
 const app = express();
 
@@ -24,6 +24,9 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/users', userroute);
 app.use('/api/news', newroute);
+app.use('/api/score', scoreroute);
+app.use('/api/addfriend', addfriend);
+
 
 
 // Démarrer le serveur

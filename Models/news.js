@@ -13,6 +13,9 @@ const newsSchema = new mongoose.Schema({
     auteur: { type: String, required: true },
     likes: { type: Number, default: 0 },
     dislikes: { type: Number, default: 0 },
+    likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Liste des utilisateurs ayant liké
+    dislikedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] ,
+    score:{type:Number,default:0},
     commentaires: [commentSchema] // Liste des commentaires
 });
 
