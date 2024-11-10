@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', userroute);
 app.use('/api/news', newroute);
 app.use('/api/score', scoreroute);
-app.use('/api/addfriend', addfriend);
+app.use('/api/friend', addfriend);
 
 
 
